@@ -1,0 +1,131 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Form {
+  id: String!
+  title: String!
+  participants: [Participant!]!
+  questions: [Question!]!
+  timeSent: String!
+  tenderID: String!
+  description: String!
+  subject: String!
+  message: String!
+  # orgID: String!
+  aimID: String!
+  stage: String
+}
+
+type Participant {
+  id: ID!
+  email: String!
+  feedback: [Feedback!]!
+  latitude: String
+  longitude: String
+}
+
+type Feedback {
+  id: ID!
+  questionTitle: String!
+  questionType: String!
+  response: String!
+  stage: String!
+}
+
+type Question {
+  id: ID!
+  title: String!
+  inputType: String!
+  options: [Option!]!
+  min: Int!
+  max: Int!
+  feedback: [Feedback]
+}
+
+type Option {
+  rank: Int!
+  description: String!
+}
+
+type Query {
+  forms: [Form!]!
+}
+
+input NewForm {
+  title: String!
+  participants: [NewParticipant!]!
+  questions: [NewQuestion!]!
+  tenderID: String!
+  description: String!
+  subject: String!
+  message: String!
+  # orgID: String!
+  aimID: String!
+}
+
+input NewParticipant {
+  email: String!
+  feedback: [NewFeedback]
+  latitude: String
+  longitude: String
+}
+
+input NewFeedback {
+  formID: ID!
+  participantID: ID!
+  questionID: ID!
+  response: String!
+  stage: String!
+  longitude: String!
+  latitude: String!
+  questionTitle: String!
+  questionType: String!
+}
+
+input NewQuestion {
+  title: String!
+  inputType: String!
+  options: [NewOption!]!
+  min: Int!
+  max: Int!
+  feedback: [NewFeedback]
+}
+
+input NewOption {
+  rank: Int!
+  description: String!
+}
+
+input UpdateQuestion {
+  id: ID!
+  formID: ID!
+  title: String!
+  inputType: String!
+  options: [NewOption!]!
+  min: Int!
+  max: Int!
+}
+
+input DeleteForm {
+  id: ID!
+}
+
+input EmailRecipiant {
+  participantID: String!
+  email: String!
+}
+
+input NewEmail{
+  participants: [EmailRecipiant!]!
+  message: String!
+  subject: String!
+}
+
+type Mutation {
+  createForm(input: NewForm!): Form!
+  deleteForm(input: DeleteForm!): Form!
+  addFeedback(input: [NewFeedback!]!): Form!
+  updateQuestion(input: UpdateQuestion!): Form!
+  resendEmail(input: NewEmail!): String!
+}
